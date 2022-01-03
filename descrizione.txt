@@ -1,0 +1,17 @@
+Buona sera,
+allora riassumendo i punti che abbiamo detto oggi:
+riguardo a i dati con nuvola di punti 3D, immagini e dati di calibrazione per intanto rimandiamo a scene già acquisite che vi farò avere,
+I metodi di stima della posa da analizzare sono:
+Fiore (quello già visto a lezione e spiegato anche nel libro di visione, vedi http://profs.sci.univr.it/~castella/scambio/MasterCGD-2014/appunti_10.pdf pag. 113)
+POSIT, vi allego il paper di riferimento e le rispettive funzioni matlab (per far andare driver_POSIT avete bisogno degli script dell'esercitazione di Fiore disponibile su moodle),
+Lowe, come metodo iterativo, spiegato nel libro di visione a pag. 145, vi allego uno script con l'implementazione che però contiene solo la funzione (dubito che si vedano benefici sulla immagine di Ca Vignal visto che il metodo non iterativo di Fiore funziona già molto bene), 
+Il metodo Anisotropic Orthogonal Procustes Analysis di cui allego il paper e lo script matlab exterior_iter che lo implementa, su questo quando siete pronti ne discutiamo insieme...
+Far funzionare il tutoria su OpenCV: https://docs.opencv.org/4.x/dc/d2c/tutorial_real_time_pose.html, anche su questo ci sentiremo quando sarà il momento perchè dovremmo capire come sfruttare i modelli 3D e le corrispondenze 3D-2D,
+
+
+per avere un dataset più corposo potete far riferimento alle immagini della statua di dante che sono disponibili sul sito di 3Dflow: https://www.3dflow.net/it/3df-zephyr-vetrina-di-ricostruzioni/
+
+I rispettivi parametri interni ed esterni di ciascuna immagine li trovate nei file allegati.
+La nuvola di punti invece la trovate qui: https://drive.google.com/file/d/18olroRcKWLHYSXDRE609jXdys4eoiCcv/view?usp=sharing (se potete scaricare in fretta così poi ci liberiamo la memoria),
+
+provate eventualmente a proiettare la nuvola sulle varie viste usando le rispettive matrici PPM,

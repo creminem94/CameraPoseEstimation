@@ -1,4 +1,4 @@
-function [rotation, translation] = classicPosit(imagePoints, objectPoints, focalLength, center)
+function [rotation, translation] = exterior_posit(imagePoints, objectPoints, focalLength, center)
 %
 % Usage:  [rotation, translation] = classicPosit(imagePoints, objectPoints, focalLength, center)
 % Return rotation and translation of world object 

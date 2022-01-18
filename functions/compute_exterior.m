@@ -6,11 +6,12 @@ function ext = compute_exterior(K, p2D, p3D, method)
         [R,t] = exterior_iter(p2D,p3D,K)
         ext = [R t];
     elseif method == MethodName.Lowe
-        G0 = eye(4);
-        ext = exterior_lowe(K,p3D,p2D,G0);
+        G0 = [eye(3) zeros(3,1)]; % Must be 3x4
+        ext = exterior_lowe(K,p3D',p2D',G0);
     elseif method == MethodName.Posit
-        [R, t] = exterior_posit(p2D, p3D, K(1,1), K(1:2,3));
-        ext = [R t];
+        [Rposit, Tposit] = exterior_posit(p2D, p3D, K(1,1), K(1:2,3));
+        t =-((Rposit*p3D(1,:)')-Tposit');
+        ext = [Rposit t];
     end
 end
 

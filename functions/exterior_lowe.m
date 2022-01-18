@@ -1,4 +1,4 @@
-function G = lowe(A,model3d,data2d,G0);
+function G = exterior_lowe(A,model3d,data2d,G0);
 %LOWE solve exterior orientation with Lowe's algorithm
 %
 %    G = exterior(A,model3d,data2d,G0) returns camera pose G given a list of
@@ -23,7 +23,7 @@ if nA~=3 | mA~=4
     error('Formato errato della matrice dei parametri estrinseci (3x4)!!')
 end
 
-[rml,cml2]=size(data2d);
+[rml,cml2]=size(data2d); % perchè passa i parametri 2d?? 
  
 if (rml ~= 2)
   error('Le coordinate 3D  devono essere cartesiane!!');
@@ -49,8 +49,8 @@ if (cml2 ~= cml3)
 end
 
 
-a = [ieul(G0(1:3,1:3)) ; G0(:,4)];
-
+%a = [ieul(G0(1:3,1:3)) ; G0(:,4)];
+a = [ieul(G0(1:3,1:3))'; G0(:,4)];
 % Il vettore a e' composto da 6 elementi:
 % i primi 3 sono gli angoli di eulero che specificano
 % rotazioni attorno ad x, y, e z (in questo ordine) 
@@ -68,7 +68,7 @@ iter = 0;
 % (or image coordinates) 
 m = pt(inv(A),data2d);
 
-% stack point coordinates 
+% stack point coordinates !! MANCA vec
 p0 = vec(m);
 
 while (norm(res)>1e-12 & iter<maxiter)

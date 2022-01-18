@@ -1,4 +1,4 @@
-function [G, s] = exterior_fiore(A,model3d,data2d);
+function [G, s] = exterior_fiore(A,model3d,data2d)
 %_EXTERIOR_FIORE Solve exterior orientation with Fiore's algorithm
 %  
 % Algorithm ref.: Fiore

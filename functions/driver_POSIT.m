@@ -33,7 +33,7 @@ figure(2)
 scatter3(p3D(:,1),p3D(:,2),p3D(:,3),5,'c');
 axis equal
 
-[Rposit, Tposit, objectVectors] = classicPosit(p2D, p3D, K(1,1), K(1:2,3));
+[Rposit, Tposit, objectVectors] = exterior_posit(p2D, p3D, K(1,1), K(1:2,3));
 
 
 % Traslazione secondo il sistema mondo:

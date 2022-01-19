@@ -3,7 +3,7 @@ function [R,t] = exterior_iter(m,M,K)
  
     Q = K\ensure_homogeneous(m);   % homogeneous NIC
 
-    MaxIterations = 200;
+    MaxIterations = 1500;
     FunctionTol = 1e-6;
     StepTol = 1e-6;
     
@@ -27,7 +27,6 @@ function [R,t] = exterior_iter(m,M,K)
         z = z * sign(z(1));
         z(z<0) = 0;
     end
-  
     % Input
     % m : matrix (3xn) image coordinates in image-space [u v 1]
     % M : matrix (3xn) coordinates in object-space [X Y Z]

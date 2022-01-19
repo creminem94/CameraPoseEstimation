@@ -1,44 +1,36 @@
-function R = eul(a,t)
-%EUL return a rotation matrix from the Euler angles
-%    R = eul(a,'RPY') return the matrix specified by the RPY (Roll,Pithch,Yaw)
-%    system, namely R = R_z(a(3)) * R_y(a(2)) * R_x(a(1)). Note that
-%    a=[Yaw,Pitch,Roll] 
-%
-%    R = eul(a,'ZYZ') return the matrix specified by the ZYZ system.
-%
-%    R = eul(a) is the same as eul(a,'RPY')
-%
-%    See also: IEUL
-
-
-% Authors: A. Fusiello, M. Mancini.
-
-
-%Controllo del formato dei parametri di input
-na=length(a);
-if na~=3
-   error('Gli angoli devo essere 3!!')
-end
-
-if (nargin < 2)
-    t='RPY';
-end
+function [R,J] = eul(a)
+    %EUL Rotation matrix from Euler angles
     
-
-phi   = a(3);
-theta = a(2);
-psi   = a(1);
-
-switch t
-    case 'RPY'
-        R = [ cos(phi)*cos(theta) cos(phi)*sin(theta)*sin(psi)-sin(phi)*cos(psi) cos(phi)*sin(theta)*cos(psi)+sin(phi)*sin(psi)
-              sin(phi)*cos(theta) sin(phi)*sin(theta)*sin(psi)+cos(phi)*cos(psi) sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi)
-              -sin(theta)                    cos(theta)*sin(psi)                              cos(theta)*cos(psi)];
-    case 'ZYZ'
-        R = [ cos(phi)*cos(theta)*cos(psi)-sin(phi)*sin(psi) -cos(phi)*cos(theta)*sin(psi)-sin(phi)*cos(psi) cos(phi)*sin(theta)
-              sin(phi)*cos(theta)*cos(psi)+cos(phi)*sin(psi) -sin(phi)*cos(theta)*sin(psi)+cos(phi)*cos(psi) sin(phi)*sin(theta)
-                -sin(theta)*cos(psi)                                       sin(theta)*sin(psi)                  cos(theta)];
-
-    otherwise
-        error('Tipo di angoli non supportato!!');
-end     
+    % a contains the Euler anlges omega, phi, kappa
+    
+    R1 =  [1     0         0
+        0 cos(a(1))  -sin(a(1))
+        0 sin(a(1))  cos(a(1))]; % omega
+    
+    R2 = [cos(a(2))  0 sin(a(2))
+        0          1       0
+        -sin(a(2)) 0  cos(a(2))]; % phi
+    
+    R3 = [cos(a(3)) -sin(a(3))  0
+        sin(a(3))   cos(a(3))  0
+        0            0         1];  % kappa
+    
+    R = R3*R2*R1;
+    
+    if nargout > 1 % jacobian required
+        
+        % derivative wrt omega
+        J_1 = R3 * R2* [ 0 0 0; 0 -sin(a(1)) -cos(a(1)); 0 cos(a(1))  -sin(a(1))];
+        % derivative wrt phi
+        J_2 = R3 * [-sin(a(2)) 0 cos(a(2)); 0 0 0; -cos(a(2)) 0 -sin(a(2)) ]  * R1 ;
+        % derivative wrt kappa
+        J_3 = [-sin(a(3)) -cos(a(3)) 0; cos(a(3)) -sin(a(3)) 0; 0 0 0] * R2 * R1;
+        
+        J = [J_1(:), J_2(:), J_3(:)] ;
+    end
+    
+    if  abs(abs(a(2)) - pi/2) < 0.01 
+        warning('Eulear rotation close to singularity')
+    end
+    
+end

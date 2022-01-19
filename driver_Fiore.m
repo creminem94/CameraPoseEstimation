@@ -36,7 +36,7 @@ axis equal
 
 % Exterior orientation
 % Estraggo un sottoinsieme tra tutte le corrispondenze
-G = compute_exterior(K,p2D(1:100,:),p3D(1:100,:), MethodName.Iter);
+G = compute_exterior(K,p2D(1:100,:)',p3D(1:100,:)', MethodName.Iter);
 %
 % Riproietto i punti 3D usando la nuova matrice degli esterni:
 plotOnImage(img,p2D, p3D, K, G)

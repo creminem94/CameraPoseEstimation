@@ -1,26 +1,35 @@
-clear all
-close all
-addpath 'dante' 'cav' 'functions';
+load('refDescriptorsCav.mat')
 
-% Caricamento informazioni camera
-load('cav/imgInfo.mat')
+f = [refDescriptors.f];
+d = [refDescriptors.d];
+checkImg =  imread('cav/cav_new.jpg');
+refImg = imread('cav/cav.jpg');
+[fc, dc] = vl_sift(single(rgb2gray(checkImg)));
+[matches, scores] = vl_ubcmatch(d, dc);
 
-% Immagine
-img = imread('cav/cav.jpg');
-figure
-imshow(img)
-% Informazioni immagine
-p2D = imgInfo.punti2DImg;
-p3D = imgInfo.punti3DImg;
-K = imgInfo.K;
+[drop, perm] = sort(scores, 'ascend');
+matches = matches(:, perm(1:20));
+scores = scores(perm(1:20));
 
-[f, d] = vl_sift(single(rgb2gray(img))) ;
-[sel, dist] = dsearchn(f(1:2,:)',p2D);
-threshold = 4; 
-valid = dist < threshold;
-sel = sel(valid);
+x_ref = f(1,matches(1,:));
+x_check = fc(1,matches(2,:))+size(refImg,2);
+y_ref = f(2,matches(1,:));
+y_check = fc(2,matches(2,:));
 
-res = getRefDescriptors(p2D, p3D, f(:,sel));
+padSize = size(refImg)-size(checkImg);
+checkImg = padarray(checkImg, padSize(1:2), 'post');
+
+figure;
+imagesc(cat(2, refImg, checkImg));
+axis image off;
+hold on;
+vl_plotframe(f(:,matches(1,:)));
+fc(1,:) = fc(1,:)+size(checkImg,2);
+vl_plotframe(fc(:,matches(2,:)));
+axis image off;
+
+h = line([x_ref;x_check],[y_ref;y_check]);
+
 
 % 
 % hold on;

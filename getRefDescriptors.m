@@ -1,10 +1,11 @@
-function res = getRefDescriptors(p2D, p3D, descr)
-    nPoints = size(descr,2);
+function res = getRefDescriptors(p2D, p3D, f, d)
+    nPoints = size(f,2);
     res(nPoints) = struct();
     for i = 1:nPoints
-        p2DIdx = dsearchn(p2D, descr(1:2, i)');
+        p2DIdx = dsearchn(p2D, f(1:2, i)');
         res(i).p3D = p3D(p2DIdx,:);
-        res(i).descr = descr(:,1);
+        res(i).f = f(:,i);
+        res(i).d = d(:,i);
     end
 end
 

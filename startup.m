@@ -1,1 +1,0 @@
-run('C:\Program Files\MATLAB\R2020b\toolbox\sift\toolbox\vl_setup');

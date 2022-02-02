@@ -1,15 +1,24 @@
-load('refDescriptorsCav.mat')
+if strcmp(env,'cav')
+    load('refDescriptorsCav.mat')
+    checkImg =  imread('cav/cav_new.jpg');
+    refImg = imread('cav/cav.jpg');
+else
+    load('refDescriptorsDante.mat')
+    checkImg = imread('Zephyr_Dante_Statue_Dataset/_SAM1096.JPG');
+    refImg =  imread('Zephyr_Dante_Statue_Dataset/_SAM1097.JPG');
+end
 
 f = [refDescriptors.f];
 d = [refDescriptors.d];
-checkImg =  imread('cav/cav_new.jpg');
-refImg = imread('cav/cav.jpg');
+
 [fc, dc] = vl_sift(single(rgb2gray(checkImg)));
 [matches, scores] = vl_ubcmatch(d, dc);
 
 [drop, perm] = sort(scores, 'ascend');
-matches = matches(:, perm(1:20));
-scores = scores(perm(1:20));
+
+toPlot = size(perm,2);
+matches = matches(:, perm(1:toPlot));
+scores = scores(perm(1:toPlot));
 
 x_ref = f(1,matches(1,:));
 x_check = fc(1,matches(2,:))+size(refImg,2);

@@ -49,8 +49,8 @@ if (cml2 ~= cml3)
 end
 
 
-%a = [ieul(G0(1:3,1:3)) ; G0(:,4)];
-a = [ieul(G0(1:3,1:3))'; G0(:,4)];
+a = [ieul(G0(1:3,1:3)) ; G0(:,4)];
+%a = [ieul(G0(1:3,1:3))'; G0(:,4)'];
 % Il vettore a e' composto da 6 elementi:
 % i primi 3 sono gli angoli di eulero che specificano
 % rotazioni attorno ad x, y, e z (in questo ordine) 

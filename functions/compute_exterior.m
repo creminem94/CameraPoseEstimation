@@ -10,7 +10,7 @@ function ext = compute_exterior(K, p2D, p3D, method)
         ext = exterior_lowe(K,p3D,p2D,G0);
     elseif method == MethodName.Posit
         [Rposit, Tposit] = exterior_posit(p2D', p3D', K(1,1), K(1:2,3));
-        t =-((Rposit*p3D(1,:)')-Tposit');
+        t =-((Rposit*p3D(:,1))-Tposit');
         ext = [Rposit t];
     end
 end

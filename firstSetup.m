@@ -1,24 +1,29 @@
 clear all
 close all
-run('functions\sift\toolbox\vl_setup');
 
 addpath 'dante' 'cav' 'functions';
+%run('functions\sift\toolbox\vl_setup');
+run('C:\Program Files\MATLAB\R2020b\toolbox\sift\toolbox\vl_setup');
+
 env = 'dante'; %dante or cav
 
 % Load reference camera info
 if strcmp(env,'cav')
     load('cav/imgInfo.mat')
-    % Immagine
     img = imread('cav/cav.jpg');
     p2D = imgInfo.punti2DImg;
     p3D = imgInfo.punti3DImg;
     K = imgInfo.K;
+    R = imgInfo.R;
+    T = imgInfo.T;
 else
     pose_driver;
     img = imread('Zephyr_Dante_Statue_Dataset/_SAM1097.JPG');
     p2D = VisPoints(:,2:3);
     p3D = Xvis;
 end
+
+
 
 
 

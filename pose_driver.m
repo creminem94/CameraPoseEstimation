@@ -4,10 +4,10 @@
 % Read cloud of points, and project points to 2D images (using information
 % on visibility)
 %
+directory_ref = '.\dante\';
 directory = '.\Zephyr_Dante_Statue_Dataset\';
-
 %Read and show sparse point clouds: (there are many noisy points, it is good to subsample the cloud) 
-[Points] = plyread([directory 'SamPointCloud.ply']);
+[Points] = plyread([directory_ref 'SamPointCloud.ply']);
 X=[Points.vertex.x Points.vertex.y Points.vertex.z];
 % figure(1)
 % plot3(X(1:10:end, 1),X(1:10:end, 2), X(1:10:end,3), 'r.');
@@ -24,7 +24,7 @@ X=[Points.vertex.x Points.vertex.y Points.vertex.z];
  
 
 %  fid=fopen([directory 'Visibility.txt'], 'r');
-fid=fopen([directory 'VisibilityRef.txt'], 'r');
+fid=fopen([directory_ref 'VisibilityRef.txt'], 'r');
 
 % line_ex = fgetl(fid);
 % disp(line_ex);
@@ -66,8 +66,8 @@ fid=fopen([directory 'VisibilityRef.txt'], 'r');
     % 
     % Read camera parameters:
     name = [directory name_view(1:end-3) 'xmp'];
-    [K, R, t] = read_xmp(name);
-    G = [R t; 0 0 0 1];
+    [K, R, T] = read_xmp(name);
+    G = [R T; 0 0 0 1];
     %Full matrix
 %     ppm = K * [1 0 0 0
 %             0 1 0 0

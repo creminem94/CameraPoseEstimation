@@ -10,8 +10,10 @@ end
 
 f = [refDescriptors.f];
 d = [refDescriptors.d];
+p2D_ref = [refDescriptors.p2D];
+p2D_ref = reshape(p2D_ref, 2, [])';
 p3D_ref = [refDescriptors.p3D];
-p3D_ref = reshape(p3D_ref, [],3);
+p3D_ref = reshape(p3D_ref, 3, [])';
 
 [fc, dc] = vl_sift(single(rgb2gray(checkImg)));
 [matches, scores] = vl_ubcmatch(d, dc);
@@ -30,6 +32,8 @@ y_check = fc(2,matches(2,:));
 
 padSize = size(refImg)-size(checkImg);
 checkImg = padarray(checkImg, padSize(1:2), 'post');
+p2D_check = fc(1:2,matches(2,:))';
+p3D_check = p3D_ref(matches(1,:),:);
 
 figure(1);
 imagesc(cat(2, refImg, checkImg));
@@ -50,15 +54,18 @@ h = line([x_ref;x_check],[y_ref;y_check]);
 % set(h1,'color','k','linewidth',3) ;
 % set(h2,'color','y','linewidth',2) ;
 
-p3D_check = p3D_ref(matches(1,:),:);
-p2D_check = fc(1:2,matches(2,:))';
 
 
-
+%%
+modelPoints = 100;
 % Exterior orientation
 % Estraggo un sottoinsieme tra tutte le corrispondenze
-G = compute_exterior(K,p2D_check(1:100,:)',p3D_check(1:100,:)', MethodName.Fiore);
-% 
+G = compute_exterior(K,[R T], p2D_check(1:modelPoints,:)',p3D_check(1:modelPoints,:)', MethodName.Fiore);
 % Riproietto i punti 3D usando la nuova matrice degli esterni:
-plotOnImage(checkImg,p2D_check, p3D_check, K, G)
+plotOnImage(checkImg,p2D_check, p3D_check, K, G);
+title('check img');
+
+G_ref = compute_exterior(K,[R T], p2D_ref(1:100,:)',p3D_ref(1:100,:)', MethodName.Fiore);
+plotOnImage(refImg,p2D_ref, p3D_ref, K, G_ref);
+title('ref img');
 

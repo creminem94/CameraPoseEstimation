@@ -2,8 +2,8 @@ clear all
 close all
 
 addpath 'dante' 'cav' 'functions';
-%run('functions\sift\toolbox\vl_setup');
-run('C:\Program Files\MATLAB\R2020b\toolbox\sift\toolbox\vl_setup');
+run('functions\sift\toolbox\vl_setup');
+% run('C:\Program Files\MATLAB\R2020b\toolbox\sift\toolbox\vl_setup');
 
 env = 'dante'; %dante or cav
 
@@ -22,10 +22,6 @@ else
     p2D = VisPoints(:,2:3);
     p3D = Xvis;
 end
-
-
-
-
 
 [f, d] = vl_sift(single(rgb2gray(img))) ;
 [sel, dist] = dsearchn(f(1:2,:)',p2D);

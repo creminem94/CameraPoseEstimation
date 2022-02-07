@@ -61,6 +61,8 @@ objectMatrix = pinv(objectVectors) % pseudoinverse
 
 oldSOPImagePoints = imagePoints;
 
+maxIter = 5000;
+
 while ~converged
 	if count == 0
 		imageVectors = imagePoints - ones(nbPoints,1) * imagePoints(1,:);
@@ -73,7 +75,9 @@ while ~converged
 		oldSOPImagePoints = SOPImagePoints;
 		imageVectors = SOPImagePoints - ones(nbPoints,1) * SOPImagePoints(1,:)
 	end % else
-
+    if count > maxIter
+        return;
+    end
 	IJ = (objectMatrix * imageVectors)'
 	IVect = IJ(1,:); JVect = IJ(2,:);
 	ISquare = IVect*IVect';

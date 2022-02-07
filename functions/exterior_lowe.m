@@ -1,4 +1,4 @@
-function G = exterior_lowe(A,model3d,data2d,G0);
+function G = exterior_lowe(A,model3d,data2d,G0)
 %LOWE solve exterior orientation with Lowe's algorithm
 %
 %    G = exterior(A,model3d,data2d,G0) returns camera pose G given a list of
@@ -58,7 +58,7 @@ a = [ieul(G0(1:3,1:3)) ; G0(:,4)];
 
 % constants
 vanishing = 1e-15;
-maxiter = 300;
+maxiter = 1000;
 
 % initialization
 res = 1E40 * ones(2*size(data2d,2),1);

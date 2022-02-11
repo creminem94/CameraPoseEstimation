@@ -61,7 +61,7 @@ objectMatrix = pinv(objectVectors) % pseudoinverse
 
 oldSOPImagePoints = imagePoints;
 
-maxIter = 5000;
+maxIter = 1000;
 
 while ~converged
 	if count == 0

@@ -1,3 +1,56 @@
+%% get reference data (K, R, T, p2D, p3D) and save best points descriptors 
+clear all
+close all
+
+addpath 'dante' 'cav' 'functions';
+run('functions\sift\toolbox\vl_setup');
+% run('C:\Program Files\MATLAB\R2020b\toolbox\sift\toolbox\vl_setup');
+
+env = 'dante'; %dante or cav
+
+% Load reference camera info
+if strcmp(env,'cav')
+    load('cav/imgInfo.mat')
+    img = imread('cav/cav.jpg');
+    p2D = imgInfo.punti2DImg;
+    p3D = imgInfo.punti3DImg;
+    K = imgInfo.K;
+    R = imgInfo.R;
+    T = imgInfo.T;
+else
+    pose_driver;
+    img = imread('Zephyr_Dante_Statue_Dataset/_SAM1097.JPG');
+    p2D = VisPoints(:,2:3);
+    p3D = Xvis;
+end
+nPoint = length(p3D);
+% RANSAC
+[model, inliers, outliers, inliersIdx] = ransacPose(p3D,100,0.8,floor(nPoint*0.95));
+figure()
+scatter3(inliers(:,1),inliers(:,2),inliers(:,3),5,'r');
+hold on;
+scatter3(outliers(:,1),outliers(:,2),outliers(:,3),5,'g');
+axis equal
+p3D = inliers;
+p2D = p2D(inliersIdx,:);
+
+[f, d] = vl_sift(single(rgb2gray(img))) ;
+[sel, dist] = dsearchn(f(1:2,:)',p2D);
+threshold = 4; 
+valid = dist < threshold;
+sel = sel(valid);
+
+refDescriptors = getRefDescriptors(p2D, p3D, f(:,sel), d(:,sel));
+if strcmp(env,'cav')
+    save('refDescriptorsCav.mat', 'refDescriptors');
+else
+    save('refDescriptorsDante.mat', 'refDescriptors');
+end
+
+figure()
+scatter3(p3D(:,1),p3D(:,2),p3D(:,3),5,'r');
+axis equal
+%% match with a new image
 if strcmp(env,'cav')
     load('refDescriptorsCav.mat')
     checkImg =  imread('cav/cav_new.jpg');
@@ -35,7 +88,7 @@ checkImg = padarray(checkImg, padSize(1:2), 'post');
 p2D_check = fc(1:2,matches(2,:))';
 p3D_check = p3D_ref(matches(1,:),:);
 
-figure(1);
+figure();
 imagesc(cat(2, refImg, checkImg));
 axis image off;
 hold on;
@@ -56,7 +109,7 @@ h = line([x_ref;x_check],[y_ref;y_check]);
 
 
 
-%%
+%% compute exterior
 modelPoints = 100;
 % Exterior orientation
 % Estraggo un sottoinsieme tra tutte le corrispondenze
@@ -65,7 +118,13 @@ G = compute_exterior(K,[R T], p2D_check(1:modelPoints,:)',p3D_check(1:modelPoint
 plotOnImage(checkImg,p2D_check, p3D_check, K, G);
 title('check img');
 
-G_ref = compute_exterior(K,[R T], p2D_ref(1:100,:)',p3D_ref(1:100,:)', MethodName.Fiore);
+G_ref = compute_exterior(K,[eye(3) zeros(3,1)], p2D_ref(1:100,:)',p3D_ref(1:100,:)', MethodName.Posit);
 plotOnImage(refImg,p2D_ref, p3D_ref, K, G_ref);
 title('ref img');
 
+
+figure()
+scatter3(p3D_check(:,1),p3D_check(:,2),p3D_check(:,3),5,'r');
+axis equal
+
+%% NUOVA CAMERA CON PICKING 3D

@@ -19,18 +19,19 @@ if strcmp(env,'cav')
     T = imgInfo.T;
 else
     pose_driver;
-    img = imread('Zephyr_Dante_Statue_Dataset/_SAM1097.JPG');
+    img = imread('Zephyr_Dante_Statue_Dataset/_SAM1013.JPG');
     p2D = VisPoints(:,2:3);
     p3D = Xvis;
 end
 nPoint = length(p3D);
-% RANSAC
+
+%RANSAC
 [model, inliers, outliers, inliersIdx] = ransacPose(p3D,100,0.8,floor(nPoint*0.95));
 figure()
 scatter3(inliers(:,1),inliers(:,2),inliers(:,3),5,'r');
 hold on;
 scatter3(outliers(:,1),outliers(:,2),outliers(:,3),5,'g');
-axis equal
+% axis equal
 p3D = inliers;
 p2D = p2D(inliersIdx,:);
 
@@ -57,8 +58,9 @@ if strcmp(env,'cav')
     refImg = imread('cav/cav.jpg');
 else
     load('refDescriptorsDante.mat')
-    checkImg = imread('Zephyr_Dante_Statue_Dataset/_SAM1096.JPG');
-    refImg =  imread('Zephyr_Dante_Statue_Dataset/_SAM1097.JPG');
+    checkImg = imread('test.jpg');
+%     checkImg = imrotate(checkImg, 90);
+    refImg =  imread('Zephyr_Dante_Statue_Dataset/_SAM1013.JPG');
 end
 
 f = [refDescriptors.f];
@@ -81,13 +83,12 @@ x_ref = f(1,matches(1,:));
 x_check = fc(1,matches(2,:))+size(refImg,2);
 y_ref = f(2,matches(1,:));
 y_check = fc(2,matches(2,:));
-
-
-padSize = size(refImg)-size(checkImg);
-checkImg = padarray(checkImg, padSize(1:2), 'post');
+p2D_refMatch = [x_ref', y_ref'];
 p2D_check = fc(1:2,matches(2,:))';
 p3D_check = p3D_ref(matches(1,:),:);
-
+%%
+padSize = size(refImg)-size(checkImg);
+checkImg = padarray(checkImg, padSize(1:2), 'post');
 figure();
 imagesc(cat(2, refImg, checkImg));
 axis image off;
@@ -110,16 +111,17 @@ h = line([x_ref;x_check],[y_ref;y_check]);
 
 
 %% compute exterior
-modelPoints = 100;
+newK = getInternals('test.jpg');
+modelPoints = 1:length(x_check);
 % Exterior orientation
 % Estraggo un sottoinsieme tra tutte le corrispondenze
-G = compute_exterior(K,[R T], p2D_check(1:modelPoints,:)',p3D_check(1:modelPoints,:)', MethodName.Fiore);
+G = compute_exterior(newK,[R T], p2D_check(modelPoints,:)',p3D_check(modelPoints,:)', MethodName.Fiore);
 % Riproietto i punti 3D usando la nuova matrice degli esterni:
-plotOnImage(checkImg,p2D_check, p3D_check, K, G);
+plotOnImage(checkImg,p2D_check(modelPoints,:), p3D_check(modelPoints,:), newK, G);
 title('check img');
 
-G_ref = compute_exterior(K,[eye(3) zeros(3,1)], p2D_ref(1:100,:)',p3D_ref(1:100,:)', MethodName.Posit);
-plotOnImage(refImg,p2D_ref, p3D_ref, K, G_ref);
+G_ref = compute_exterior(K,[eye(3) zeros(3,1)], p2D_refMatch(modelPoints,:)',p3D_check(modelPoints,:)', MethodName.Fiore);
+plotOnImage(refImg,p2D_refMatch(modelPoints,:), p3D_check(modelPoints,:), K, G_ref);
 title('ref img');
 
 

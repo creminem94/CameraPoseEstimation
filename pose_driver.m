@@ -24,7 +24,7 @@ X=[Points.vertex.x Points.vertex.y Points.vertex.z];
  
 
 %  fid=fopen([directory 'Visibility.txt'], 'r');
-fid=fopen([directory_ref 'VisibilityRef.txt'], 'r');
+fid=fopen([directory_ref 'VisibilityRef1013.txt'], 'r');
 
 % line_ex = fgetl(fid);
 % disp(line_ex);

@@ -3,7 +3,7 @@ function [R,t] = exterior_iter(m,M,K)
  
     Q = K\ensure_homogeneous(m);   % homogeneous NIC
 
-    MaxIterations = 1500;
+    MaxIterations = 5000;
     FunctionTol = 1e-6;
     StepTol = 1e-6;
     

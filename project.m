@@ -25,7 +25,7 @@ else
 end
 nPoint = length(p3D);
 
-%RANSAC
+%% RANSAC
 [model, inliers, outliers, inliersIdx] = ransacPose(p3D,100,0.8,floor(nPoint*0.95));
 figure()
 scatter3(inliers(:,1),inliers(:,2),inliers(:,3),5,'r');
@@ -112,16 +112,19 @@ h = line([x_ref;x_check],[y_ref;y_check]);
 
 %% compute exterior
 newK = getInternals('test.jpg');
-modelPoints = 1:length(x_check);
+index = [147, 166, 124, 78, 136, 162, 137, 151, 10, 12, 62, 40, 50, 159]; 
+%modelPoints = 1:length(x_check);
+modelPoints = index;
 % Exterior orientation
 % Estraggo un sottoinsieme tra tutte le corrispondenze
-G = compute_exterior(newK,[R T], p2D_check(modelPoints,:)',p3D_check(modelPoints,:)', MethodName.Fiore);
+G = compute_exterior(newK,[R T], p2D_check(modelPoints,:)',p3D_check(modelPoints,:)', MethodName.Iter);
+%G = compute_exterior(newK,G, p2D_check(modelPoints,:)',p3D_check(modelPoints,:)', MethodName.Lowe);
 % Riproietto i punti 3D usando la nuova matrice degli esterni:
-plotOnImage(checkImg,p2D_check(modelPoints,:), p3D_check(modelPoints,:), newK, G);
+plotOnImage(checkImg,p2D_check(modelPoints,:), p3D_check(modelPoints,:), newK, G, modelPoints);
 title('check img');
 
 G_ref = compute_exterior(K,[eye(3) zeros(3,1)], p2D_refMatch(modelPoints,:)',p3D_check(modelPoints,:)', MethodName.Fiore);
-plotOnImage(refImg,p2D_refMatch(modelPoints,:), p3D_check(modelPoints,:), K, G_ref);
+plotOnImage(refImg,p2D_refMatch(modelPoints,:), p3D_check(modelPoints,:), K, G_ref, modelPoints);
 title('ref img');
 
 
@@ -129,4 +132,3 @@ figure()
 scatter3(p3D_check(:,1),p3D_check(:,2),p3D_check(:,3),5,'r');
 axis equal
 
-%% NUOVA CAMERA CON PICKING 3D

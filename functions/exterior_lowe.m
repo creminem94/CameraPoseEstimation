@@ -58,7 +58,7 @@ a = [ieul(G0(1:3,1:3)) ; G0(:,4)];
 
 % constants
 vanishing = 1e-15;
-maxiter = 1000;
+maxiter = 5000;
 
 % initialization
 res = 1E40 * ones(2*size(data2d,2),1);

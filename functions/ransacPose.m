@@ -1,43 +1,42 @@
-function [bestModel, inliers, outliers, inliersIdx] = ransacPose(points,maxIter,t,d)
+function [bestInliers, bestOutliers] = ransacPose(p2D, p3D,K,maxIter,t,d)
     i = 0;
+    minDist = Inf;
+    maxD = 0;
     rng('shuffle');
     while i < maxIter
         i = i+1;
-        idx1 = randi(length(points));
-        idx2 = randi(length(points));
-        idx3 = randi(length(points));
-        while idx2 == idx1
-            idx2 = randi(length(points));
-        end
-        while idx3 == idx1 || idx3 == idx2
-            idx3 = randi(length(points));
-        end
-    
+        idxs = randi(length(p2D),6,1);    
         %model
-        A = points(idx1,:);
-        B = points(idx2,:);
-        C = points(idx3,:);
-        plane = getPlane(A, B, C);
+        p2D_model = p2D(idxs,:);
+        p3D_model = p3D(idxs,:);
+        G = compute_exterior(K,[eye(3) zeros(3,1)], p2D_model',p3D_model', MethodName.Fiore);
+        P1=K*G;
+        [u1,v1] = proj(P1,p3D);
+        projV = [u1,v1];
         inliers = [];
         outliers = [];
-        inliersIdx = [];
-        for j = 1:length(points)
-            if j == idx1 || j == idx2
-                continue;
+        for j = 1:length(p2D)
+            dist = norm(p2D(j,:)-projV(j,:));
+            if (dist < minDist)
+                minDist = dist;
             end
-            P = points(j,:);
-            dist = point2planeDist(P, plane);
             if abs(dist) <= t
-                inliers = [inliers; P];
-                inliersIdx = [inliersIdx j];
+                inliers = [inliers; j];
             else
-                outliers = [outliers;P];
+                outliers = [outliers;j];
             end
         end
-        if length(inliers) >= d
+        nIn = length(inliers);
+        if nIn > maxD 
+            bestInliers = inliers;
+            bestOutliers = outliers;
+            maxD = nIn;
+        end
+        if nIn >= d
             break;
         end       
     end
-    bestModel = plane;
+    maxD
+    minDist
 end
 

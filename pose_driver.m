@@ -23,9 +23,9 @@ X=[Points.vertex.x Points.vertex.y Points.vertex.z];
 %  plot3(X(1:10:end, 1),X(1:10:end, 2), X(1:10:end,3), 'r.');
  
 
-%  fid=fopen([directory 'Visibility.txt'], 'r');
-fid=fopen([directory_ref 'VisibilityRef1013.txt'], 'r');
-
+ fid=fopen([directory_ref 'VisibilityRef.txt'], 'r');
+% fid=fopen([directory_ref 'VisibilityRef1013.txt'], 'r');
+% 
 % line_ex = fgetl(fid);
 % disp(line_ex);
 

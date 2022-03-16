@@ -13,13 +13,11 @@ if strcmp(env,'cav')
     R_ref = imgInfo.R;
     T_ref = imgInfo.T;
 else
-    pose_driver;
-    K_ref = K;
-    R_ref = R;
-    T_ref = T;
-    refImg = imread('Zephyr_Dante_Statue_Dataset/_SAM1013.JPG');
-    p2D = VisPoints(:,2:3);
-    p3D = Xvis;
+    imageIndex = '1013';
+    [K_ref, R_ref, T_ref, p2D, p3D] = dante_get_points('dante/SamPointCloud.ply', ...
+        "dante/VisibilityRef"+imageIndex+".txt", ...
+        "Zephyr_Dante_Statue_Dataset/_SAM"+imageIndex+".xmp");
+    refImg = imread("Zephyr_Dante_Statue_Dataset/_SAM"+imageIndex+".JPG");
 end
 nPoint = length(p3D);
 
@@ -32,7 +30,7 @@ sel = sel(valid);
 
 [p2D_ref, p3D_ref, f_ref, d_ref] = getRefDescriptors(p2D, p3D, f(:,sel), d(:,sel));
 if strcmp(env,'cav')
-    save('refDescriptorsCav.mat', 'p2D_ref' , 'p3D_ref', 'f_ref', 'd_ref', 'K_ref', 'R_ref', 'T_ref', 'refImg');
+    save('models/refDescriptorsCav.mat', 'p2D_ref' , 'p3D_ref', 'f_ref', 'd_ref', 'K_ref', 'R_ref', 'T_ref', 'refImg');
 else
-    save('refDescriptorsDante.mat', 'p2D_ref' , 'p3D_ref', 'f_ref', 'd_ref', 'K_ref', 'R_ref', 'T_ref', 'refImg');
+    save("models/refDescriptorsDante"+imageIndex+".mat", 'p2D_ref' , 'p3D_ref', 'f_ref', 'd_ref', 'K_ref', 'R_ref', 'T_ref', 'refImg');
 end

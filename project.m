@@ -6,26 +6,19 @@ run('functions/sift/toolbox/vl_setup');
 
 %params
 modelFile = 'models/refDescriptorsDante1013';
-refImageFile = 'Zephyr_Dante_Statue_Dataset/_SAM1097.JPG';
 checkImageFile = 'dante/test.jpg';
 method = MethodName.Fiore;
-
-%load data and images
-load(modelFile); %add to workspace "refDescriptors"
-checkImg =  imread(checkImageFile);
-refImg = imread(refImageFile);
 testK = getInternals(checkImageFile); % estimated internal params of test image
 
+%load data and images
+load(modelFile);
+checkImg =  imread(checkImageFile);
+
+
 % sift match descriptors
-f = [refDescriptors.f];
-d = [refDescriptors.d];
-p2D_ref = [refDescriptors.p2D];
-p2D_ref = reshape(p2D_ref, 2, [])';
-p3D_ref = [refDescriptors.p3D];
-p3D_ref = reshape(p3D_ref, 3, [])';
 
 [fc, dc] = vl_sift(single(rgb2gray(checkImg)));
-[matches, scores] = vl_ubcmatch(d, dc);
+[matches, scores] = vl_ubcmatch(d_ref, dc);
 
 [drop, perm] = sort(scores, 'ascend');
 
@@ -33,9 +26,9 @@ toPlot = size(perm,2);
 matches = matches(:, perm(1:toPlot));
 scores = scores(perm(1:toPlot));
 
-x_ref = f(1,matches(1,:));
+x_ref = f_ref(1,matches(1,:));
 x_check = fc(1,matches(2,:))+size(refImg,2);
-y_ref = f(2,matches(1,:));
+y_ref = f_ref(2,matches(1,:));
 y_check = fc(2,matches(2,:));
 p2D_refMatch = [x_ref', y_ref'];
 p2D_check = fc(1:2,matches(2,:))';
@@ -59,12 +52,10 @@ T = G(1:3, 4);
 
 figure()
 scatter3(p3D_ref(:,1),p3D_ref(:,2),p3D_ref(:,3),5,'r');
-axis equal
-hold on;
-plot3(T(1), T(2), T(3),'-o','Color','b','MarkerSize',10);
-
-ref = R;
-hold on;
-f1 = quiver3(T(1), T(2), T(3),ref(1,1),ref(2,1),ref(3,1),'Color','r','DisplayName','t');
-f2 = quiver3(T(1), T(2), T(3),ref(1,2),ref(2,2),ref(3,2),'Color','g','DisplayName','n');
-f3 = quiver3(T(1), T(2), T(3),ref(1,3),ref(2,3),ref(3,3),'Color','b','DisplayName','b');
+% hold on;
+% plotCameraOnImage(R, T)
+hold on
+plotCameraOnImage(R_ref, T_ref)
+xlim([-100 100])
+ylim([-100 100])
+zlim([-100 100])

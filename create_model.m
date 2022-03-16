@@ -30,7 +30,8 @@ sel = sel(valid);
 
 [p2D_ref, p3D_ref, f_ref, d_ref] = getRefDescriptors(p2D, p3D, f(:,sel), d(:,sel));
 if strcmp(env,'cav')
-    save('models/refDescriptorsCav.mat', 'p2D_ref' , 'p3D_ref', 'f_ref', 'd_ref', 'K_ref', 'R_ref', 'T_ref', 'refImg');
+    fileName = 'models/refDescriptorsCav.mat';
 else
-    save("models/refDescriptorsDante"+imageIndex+".mat", 'p2D_ref' , 'p3D_ref', 'f_ref', 'd_ref', 'K_ref', 'R_ref', 'T_ref', 'refImg');
+    fileName = "models/refDescriptorsDante"+imageIndex+".mat";
 end
+save(fileName, 'p2D_ref' , 'p3D_ref', 'f_ref', 'd_ref', 'K_ref', 'R_ref', 'T_ref', 'refImg');

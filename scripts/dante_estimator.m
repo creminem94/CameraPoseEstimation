@@ -1,21 +1,25 @@
 %env setup
 clear all
 close all
-addpath 'functions';
+addpath 'functions' 'classes';
 run('functions/sift/toolbox/vl_setup');
 
 %params
-method = MethodName.Posit;
-modelFile = 'models/refDescriptorsDante1013';
+method = MethodName.Fiore;
+modelFile = 'models/refDescriptorsDante1020';
 load(modelFile); %variable referenceModel
-checkImageFile = 'dante/test.jpg';
+checkImageFile = 'dante/test_4.jpg';
 % checkImageFile = 'Zephyr_Dante_Statue_Dataset/_SAM1097.JPG';
 testK = getInternals(checkImageFile); % estimated internal params of test image
 
 [R1, T1] = pose_estimator(referenceModel, checkImageFile, method, testK);
 
+ptCloud = pcread('Mesh.ply');
 figure()
-scatter3(referenceModel.p3D(:,1),referenceModel.p3D(:,2),referenceModel.p3D(:,3),5,'r');
+pcshow(ptCloud)
+set(gcf,'color','w');
+set(gca,'color','w');
+set(gca, 'XColor', [0.15 0.15 0.15], 'YColor', [0.15 0.15 0.15], 'ZColor', [0.15 0.15 0.15]);
 hold on
 plotCameraOnImage(referenceModel.R, referenceModel.T, 'ref');
 plotCameraOnImage(R1, T1, '1');

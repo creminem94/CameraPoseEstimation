@@ -1,7 +1,7 @@
 addpath 'dante' 'cav' 'functions' 'classes';
 run('functions\sift\toolbox\vl_setup');
 
-env = 'cav'; %dante or cav
+env = 'dante'; %dante or cav
 
 % Load reference camera info
 if strcmp(env,'cav')
@@ -13,7 +13,7 @@ if strcmp(env,'cav')
     R_ref = imgInfo.R;
     T_ref = imgInfo.T;
 else
-    imageIndex = '1097';
+    imageIndex = '1020';
     [K_ref, R_ref, T_ref, p2D, p3D] = dante_get_points('dante/SamPointCloud.ply', ...
         "dante/VisibilityRef"+imageIndex+".txt", ...
         "Zephyr_Dante_Statue_Dataset/_SAM"+imageIndex+".xmp");

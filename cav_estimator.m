@@ -1,7 +1,7 @@
 %env setup
 clear all
 close all
-addpath 'functions';
+addpath 'functions' 'classes';
 run('functions/sift/toolbox/vl_setup');
 
 %params

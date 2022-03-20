@@ -6,22 +6,28 @@ run('functions/sift/toolbox/vl_setup');
 
 %params
 method = MethodName.Fiore;
-modelFile = 'models/refDescriptorsDante1020';
+modelFile = 'models/refDescriptorsDante1097';
 load(modelFile); %variable referenceModel
-checkImageFile = 'dante/test/test_4.jpg';
-% checkImageFile = 'Zephyr_Dante_Statue_Dataset/_SAM1097.JPG';
+
+for i = 1:3
+checkImageFile = "dante/test/1097/test_"+num2str(i)+".jpg";
 testK = getInternals(checkImageFile); % estimated internal params of test image
-
-[R1, T1] = pose_estimator(referenceModel, checkImageFile, method, testK);
-
+[R, T] = pose_estimator(referenceModel, checkImageFile, method, testK);
+% if i == 1
+%     figure(100)
+%     scatter3(referenceModel.p3D(:,1),referenceModel.p3D(:,2),referenceModel.p3D(:,3),5,'r');
+%     hold on
+%     plotCameraOnImage(referenceModel.R, referenceModel.T, '  ref');
+% end
+figure(200)
 ptCloud = pcread('dante/Mesh.ply');
-figure()
 pcshow(ptCloud)
 set(gcf,'color','w');
 set(gca,'color','w');
 set(gca, 'XColor', [0.15 0.15 0.15], 'YColor', [0.15 0.15 0.15], 'ZColor', [0.15 0.15 0.15]);
 hold on
 plotCameraOnImage(referenceModel.R, referenceModel.T, '  ref');
-plotCameraOnImage(R1, T1, '  1');
+plotCameraOnImage(R, T, "  " + num2str(i));
 
 axis equal
+end

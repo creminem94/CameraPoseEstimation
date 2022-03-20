@@ -34,7 +34,7 @@ modelPoints = 1:length(inliers);
 p2D_best = p2D_check(inliers,:);
 p3D_best = p3D_check(inliers,:);
 
-G = compute_exterior(testK,[eye(3) zeros(3,1)], p2D_best(modelPoints,:)',p3D_best(modelPoints,:)', method)
+G = compute_exterior(testK,[eye(3) zeros(3,1)], p2D_best(modelPoints,:)',p3D_best(modelPoints,:)', method);
 plotOnImage(checkImg,p2D_best(modelPoints,:), p3D_best(modelPoints,:), testK, G);
 title(strcat('Projection of best model points on test image with ',string(method)));
 

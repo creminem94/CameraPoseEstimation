@@ -43,7 +43,7 @@ if strcmp(method,'scale')
   
   %c = sum(diag(R'*S))/sum(diag(A'* A));
   
-  s=norm(Xb)/norm(Yb)
+  s=norm(Xb)/norm(Yb);
   
 elseif strcmp(method,'noscale')
     s = 1;

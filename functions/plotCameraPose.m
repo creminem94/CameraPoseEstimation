@@ -1,4 +1,4 @@
-function  plotCameraOnImage(R, T, label)
+function plotCameraPose(R, T, label)
     pose = -R'*T;
     plot3(pose(1), pose(2), pose(3),'-o','Color','b','MarkerSize',10);
     

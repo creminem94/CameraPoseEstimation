@@ -65,7 +65,7 @@ Then we use our function **getRefDescriptors** to associate each descriptor to t
 ### plotOnImage
 This method plots 2D points on image, and uses the given camera parameters to project the given 3D points on the image.
 
-### plotCameraOnImage
+### plotCameraPose
 Given rotation and translation matrices plot the camera position in 3D along with the frame orientation.
 
 ## Demos and results

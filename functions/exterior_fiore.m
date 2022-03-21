@@ -43,7 +43,7 @@ z = z * sign(z(1));
 % norm((vtrans(D * z,3) * V2),'fro');
 % norm(S * V2,'fro');
 
-[G1,s,res1] = absolute(vtrans(D *  z,3),model3d,'scale');
+[G1] = absolute(vtrans(D *  z,3),model3d,'scale');
 % % % $$$ 
 % % [G2,s,res2] = absolute(vtrans(D * -z,3),model3d,'scale');
 % % % $$$ 

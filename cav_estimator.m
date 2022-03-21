@@ -17,11 +17,11 @@ if i == 1
     figure(100)
     scatter3(referenceModel.p3D(:,1),referenceModel.p3D(:,2),referenceModel.p3D(:,3),5,'r');
     hold on
-    plotCameraOnImage(referenceModel.R, referenceModel.T, '  ref');
+    plotCameraPose(referenceModel.R, referenceModel.T, '  ref');
 end
 figure(100)
 hold on;
-plotCameraOnImage(R, T, "  " + num2str(i));
+plotCameraPose(R, T, "  " + num2str(i));
 axis equal
 end
 

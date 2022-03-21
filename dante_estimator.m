@@ -17,7 +17,7 @@ testK = getInternals(checkImageFile); % estimated internal params of test image
 %     figure(100)
 %     scatter3(referenceModel.p3D(:,1),referenceModel.p3D(:,2),referenceModel.p3D(:,3),5,'r');
 %     hold on
-%     plotCameraOnImage(referenceModel.R, referenceModel.T, '  ref');
+%     plotCameraPose(referenceModel.R, referenceModel.T, '  ref');
 % end
 figure(200)
 ptCloud = pcread('dante/Mesh.ply');
@@ -26,8 +26,8 @@ set(gcf,'color','w');
 set(gca,'color','w');
 set(gca, 'XColor', [0.15 0.15 0.15], 'YColor', [0.15 0.15 0.15], 'ZColor', [0.15 0.15 0.15]);
 hold on
-plotCameraOnImage(referenceModel.R, referenceModel.T, '  ref');
-plotCameraOnImage(R, T, "  " + num2str(i));
+plotCameraPose(referenceModel.R, referenceModel.T, '  ref');
+plotCameraPose(R, T, "  " + num2str(i));
 
 axis equal
 end

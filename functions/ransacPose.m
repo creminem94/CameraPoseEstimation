@@ -36,7 +36,5 @@ function [bestInliers, bestOutliers] = ransacPose(p2D, p3D,K,maxIter,t,d)
             break;
         end       
     end
-    maxD
-    minDist
 end
 
